@@ -1,0 +1,20 @@
+{
+    "name": "Satisfy.Editor",
+    "references": [
+        "GUID:1d3af088616443846927e522129f81c1",
+        "GUID:8f3620be8a7e7a74da52228a07bc2c15"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        ""
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

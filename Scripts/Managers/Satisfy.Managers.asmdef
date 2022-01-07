@@ -1,0 +1,31 @@
+{
+    "name": "Satisfy.Managers",
+    "rootNamespace": "",
+    "references": [
+        "GUID:08f562aefcfbe044cab2d9912378a346",
+        "GUID:560b04d1a97f54a4e82edc0cbbb69285",
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:865b414a121ed594e91db2e09f65d38c",
+        "GUID:041029188fa88c54f9efffc039b6a1c9",
+        "GUID:cf98256afa3e672498138b57903fca11",
+        "GUID:f2a40cb9508bc30458d668fbdced18c4",
+        "GUID:1f965fac192b7d248b2d3a1aa048882f",
+        "GUID:4407ee347bd2a584eb4c8fdf035c7ba0",
+        "GUID:890df04fecbea944da53a3e51be349eb",
+        "GUID:f012cdfa05ffc1a409297b7dc5070f58",
+        "GUID:1d3af088616443846927e522129f81c1",
+        "GUID:fb33d8d88fa856145b1ff5b903359be8",
+        "GUID:82e941c21b816d64098b80a209cfd729",
+        "GUID:d40e80a3a016f62408445008342e55cb",
+        "GUID:34ad0071d75c92d4b81055a4cb97b62c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

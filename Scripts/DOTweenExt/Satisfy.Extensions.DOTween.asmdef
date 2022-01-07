@@ -1,0 +1,20 @@
+{
+    "name": "Satisfy.Extensions.DOTween",
+    "references": [
+        "GUID:560b04d1a97f54a4e82edc0cbbb69285",
+        "GUID:f2a40cb9508bc30458d668fbdced18c4",
+        "GUID:cf98256afa3e672498138b57903fca11",
+        "GUID:1f965fac192b7d248b2d3a1aa048882f",
+        "GUID:717ea6ce8deceb84088d9773f98a4af7",
+        "GUID:fd20c2dcb4d64124d9b65ebc5b53e43f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

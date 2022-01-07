@@ -1,0 +1,22 @@
+{
+    "name": "Satisfy.Gameplay",
+    "references": [
+        "GUID:1d3af088616443846927e522129f81c1",
+        "GUID:f2a40cb9508bc30458d668fbdced18c4",
+        "GUID:560b04d1a97f54a4e82edc0cbbb69285",
+        "GUID:cf98256afa3e672498138b57903fca11",
+        "GUID:717ea6ce8deceb84088d9773f98a4af7",
+        "GUID:08f562aefcfbe044cab2d9912378a346"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [
+        "XboxOne"
+    ],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
