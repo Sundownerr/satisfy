@@ -7,26 +7,30 @@ using UnityEngine;
 namespace Satisfy.Entities
 {
     [HideMonoScript]
-    public class DoAction : MonoBehaviour
+    public class Action : MonoBehaviour
     {
         [BoxGroup("toggle", false)]
-        [PropertySpace(10)]
-        [SerializeField, LabelText("Play on start"), LabelWidth(80)] bool doOnStart;
+        [SerializeField, LabelText("Play on start"), LabelWidth(80)]
+        private bool doOnStart;
 
         [BoxGroup("action", false)]
-        [SerializeField, InlineProperty, HideLabel] UnityActionWithDelay action;
-
-        public UnityActionWithDelay Action => action;
-
-        void Start()
+        [SerializeField, InlineProperty, HideLabel]
+        private UnityEventWithDelay action;
+        
+        private void Start()
         {
             if (doOnStart)
+            {
                 action.Perform();
+            }
         }
 
         [Button("Perform action", ButtonSizes.Large), PropertyOrder(-1), GUIColor(0.85f, 1, 0.85f), HideInEditorMode]
         public void Perform()
         {
+            if (!gameObject.activeSelf || !enabled)
+                return;
+            
             action.Perform();
         }
     }

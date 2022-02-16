@@ -1,5 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using Satisfy.Attributes;
 using Sirenix.OdinInspector;
 using UniRx;
@@ -7,9 +5,9 @@ using UnityEngine;
 
 namespace Satisfy.Entities
 {
-    public class DoOnKey : MonoBehaviour
+    public class DoOnKeyRelease : MonoBehaviour
     {
-        [BoxGroup("Settings", true, true), SerializeField, InlineProperty, HideLabel] UnityActionWithDelay action;
+        [BoxGroup("Settings", true, true), SerializeField, InlineProperty, HideLabel] UnityEventWithDelay action;
         [SerializeField, Tweakable] KeyCode key;
 
         void Start()
@@ -17,7 +15,7 @@ namespace Satisfy.Entities
             Observable.EveryUpdate()
                 .Where(x => enabled)
                 .Where(x => gameObject.activeSelf)
-                .Where(x => Input.GetKeyDown(key))
+                .Where(x => Input.GetKeyUp(key))
                 .Subscribe(x => { action?.Perform(); }).AddTo(this);
         }
     }

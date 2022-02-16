@@ -9,7 +9,7 @@ using Satisfy.Attributes;
 namespace Satisfy.Entities
 {
     [Serializable]
-    public class LevelAction : UnityActionWithDelay
+    public class LevelAction : UnityEventWithDelay
     {
         [SerializeField, Tweakable] int level;
 
