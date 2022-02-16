@@ -3,6 +3,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using UniRx;
 using Satisfy.Attributes;
+using Satisfy.Utility;
 
 namespace Satisfy.Variables
 {
@@ -18,7 +19,7 @@ namespace Satisfy.Variables
 
         public void IncreaseBy(int value)
         {
-            SetValue(this.value.Current + value);
+            SetValue(this.value + value);
 
             if (debug)
                 Debug.Log($"{name} increased by {value} = {Value}", this);
@@ -26,7 +27,7 @@ namespace Satisfy.Variables
 
         public void DecreaseBy(int value)
         {
-            SetValue(this.value.Current - value);
+            SetValue(this.value - value);
 
             if (debug)
                 Debug.Log($"{name} decreased by {value} = {Value}", this);
@@ -39,7 +40,7 @@ namespace Satisfy.Variables
 
         public void DecreaseBy(IntVariable variable)
         {
-            DecreaseBy(variable.value.Current);
+            DecreaseBy(variable.value);
         }
     }
 }

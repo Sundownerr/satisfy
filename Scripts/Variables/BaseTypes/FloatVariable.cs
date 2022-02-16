@@ -18,7 +18,7 @@ namespace Satisfy.Variables
 
         public void IncreaseBy(float value)
         {
-            SetValue(this.value.Current + value);
+            SetValue(this.value + value);
 
             if (debug)
                 Debug.Log($"{name} increased by {value} = {Value}", this);
@@ -26,7 +26,7 @@ namespace Satisfy.Variables
 
         public void DecreaseBy(float value)
         {
-            SetValue(this.value.Current - value);
+            SetValue(this.value - value);
 
             if (debug)
                 Debug.Log($"{name} decreased by {value} = {Value}", this);
@@ -44,7 +44,7 @@ namespace Satisfy.Variables
 
         public void DecreaseBy(FloatVariable variable)
         {
-            DecreaseBy(variable.value.Current);
+            DecreaseBy(variable.value);
         }
     }
 }

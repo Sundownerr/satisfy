@@ -10,7 +10,12 @@ namespace Satisfy.Variables
     {
         public void SetNullValue()
         {
-            SetValue(null);
+            SetValue((GameObject) null);
+        }
+
+        public void SetValue(GameObjectVariable variable)
+        {
+            SetValue(variable.Value);
         }
     }
 }

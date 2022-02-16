@@ -1,28 +1,63 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Satisfy.Attributes;
+using Satisfy.Utility;
 using Sirenix.OdinInspector;
 using UniRx;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace Satisfy.Variables
 {
-    [CreateAssetMenu(fileName = "Base", menuName = "Variables/Base")]
-    [Serializable]
-    public class Variable : ScriptableObject
+    public class Variable<T> : ScriptableObject
     {
-        public Subject<Variable> Published { get; } = new Subject<Variable>();
+        public IObservable<Pair<T>> Changed => this.ObserveEveryValueChanged(x => x.value).Pairwise();
+        public T Value => value;
+        public T DefaultValue => defaultValue;
+        
+        [SerializeField] protected T defaultValue;
+        
+        [HideInEditorMode]
+        [NonSerialized]
+        [LabelText("Runtime value")]
+        [ShowInInspector] protected T value;
 
-        [SerializeField, HideInInlineEditors] protected bool debug;
-
-        [Button("Publish", ButtonSizes.Medium), PropertyOrder(-3), HideInInlineEditors, HideInEditorMode]
-        public void Publish()
+        [HideInInlineEditors] [SerializeField] protected bool disableReset;
+        
+        [HideInInlineEditors]
+        [SerializeField] protected bool debug;
+        
+        public void SetValue(T newValue)
         {
-            Published.OnNext(this);
+            if (Value != null && Value .Equals( newValue))
+                return;
+            
+            value = newValue;
 
             if (debug)
-                Debug.Log($"[ published ]  {name}", this);
+                Debug.Log($"[ changed ]  {name} = {newValue}", this);
+        }
+
+        public void HardReset()
+        {
+            if(disableReset)
+                return;
+            
+            value = defaultValue;
+
+            if (debug)
+                Debug.Log($"[ reset ]  {name} = {defaultValue}", this);
+        }
+
+        [Button("Force Changed", ButtonSizes.Medium), PropertyOrder(-3), HideInInlineEditors, HideInEditorMode]
+        private void ForceChanged()
+        {
+            var cur = value;
+
+            SetValue(default(T));
+            SetValue(cur);
         }
     }
 }
