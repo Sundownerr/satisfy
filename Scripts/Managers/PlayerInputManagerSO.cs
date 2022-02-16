@@ -25,9 +25,9 @@ namespace Satisfy.Managers
             {
                 pointerCurrentPos.SetValue(Input.mousePosition);
             });
-
+            
             update.Where(_ => Input.GetMouseButtonDown(0))
-                .Subscribe(_ =>
+                .Subscribe(x =>
                 {
                     pointerStartPos.SetValue(Input.mousePosition);
                     pointerCurrentPos.SetValue(Input.mousePosition);
@@ -35,8 +35,8 @@ namespace Satisfy.Managers
 
                     update.TakeUntil(release.Raised).Subscribe(_ =>
                     {
-                        pointerDeltaPos.SetValue(new Vector2(Input.GetAxis("Mouse X") * dpi,
-                                                            Input.GetAxis("Mouse Y") * dpi));
+                        var delta = Lean.Touch.LeanTouch.Fingers[0].ScaledDelta;
+                        pointerDeltaPos.SetValue(delta);
                     });
                 });
 

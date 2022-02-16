@@ -1,6 +1,5 @@
 {
     "name": "Satisfy.Managers",
-    "rootNamespace": "",
     "references": [
         "GUID:08f562aefcfbe044cab2d9912378a346",
         "GUID:560b04d1a97f54a4e82edc0cbbb69285",
@@ -17,7 +16,8 @@
         "GUID:fb33d8d88fa856145b1ff5b903359be8",
         "GUID:82e941c21b816d64098b80a209cfd729",
         "GUID:d40e80a3a016f62408445008342e55cb",
-        "GUID:34ad0071d75c92d4b81055a4cb97b62c"
+        "GUID:34ad0071d75c92d4b81055a4cb97b62c",
+        "GUID:688cfbbe2a536604ab4aa06ececa1da3"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

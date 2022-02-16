@@ -10,6 +10,7 @@ using System.Linq;
 using UnityEngine.Events;
 using Satisfy.Attributes;
 using Unity.Linq;
+using Event = Satisfy.Bricks.Event;
 
 namespace Satisfy.Managers
 {
@@ -18,25 +19,25 @@ namespace Satisfy.Managers
     {
         [HorizontalGroup("g1")]
         [BoxGroup("g1/Settings1", false), GUIColor(1, 1, 0.95f), SerializeField, LabelWidth(40), HideLabel, HideIf("@zoomVariable != null")]
-        float zoom = 5f;
+        private float zoom = 5f;
 
         [BoxGroup("g1/Settings1", false), GUIColor(1, 1, 0.95f), SerializeField, LabelWidth(40), HideLabel, HideIf("@zoom != 0")]
-        FloatVariable zoomVariable;
+        private FloatVariable zoomVariable;
 
         [BoxGroup("g1/Settings1", false), GUIColor(1, 1, 0.95f), SerializeField, LabelWidth(40), HideLabel]
-        Ease ease = Ease.InOutSine;
+        private Ease ease = Ease.InOutSine;
 
         [BoxGroup("g1/Settings2", false), GUIColor(1, 1, 0.95f), SerializeField, LabelWidth(40), LabelText("In"), Min(0)]
-        float time = 0.3f;
+        private float time = 0.3f;
 
         [BoxGroup("g1/Settings2", false), GUIColor(1, 1, 0.95f), SerializeField, LabelWidth(40), LabelText("Out"), Min(-1f)]
-        float revertTime = 0.2f;
+        private float revertTime = 0.2f;
 
         [HorizontalGroup("g1/Messages"), GUIColor(0.95f, 1, 1), SerializeField]
         [ListDrawerSettings(Expanded = true, DraggableItems = false, ShowIndexLabels = false, ShowItemCount = false), PropertyOrder(-1), HideLabel, LabelText(" ")]
-        List<Variables.Variable> message;
+        private List<Event> zoomEvent;
 
-        public List<Variables.Variable> Message { get => message; set => message = value; }
+        public List<Event> Event { get => zoomEvent; set => zoomEvent = value; }
         public float Zoom { get => zoom; set => zoom = value; }
         public float Time { get => time; set => time = value; }
         public float RevertTime { get => revertTime; set => revertTime = value; }
@@ -49,22 +50,22 @@ namespace Satisfy.Managers
     {
         [HorizontalGroup("g1")]
         [BoxGroup("g1/Settings1", false), GUIColor(1, 1, 0.95f), SerializeField, LabelWidth(40), HideLabel, HideIf("@zoomVariable != null")]
-        float zoom = 5f;
+        private float zoom = 5f;
 
         [BoxGroup("g1/Settings1", false), GUIColor(1, 1, 0.95f), SerializeField, LabelWidth(40), HideLabel, HideIf("@zoom != 0")]
-        FloatVariable zoomVariable;
+        private FloatVariable zoomVariable;
 
         [BoxGroup("g1/Settings1", false), GUIColor(1, 1, 0.95f), SerializeField, LabelWidth(40), HideLabel]
-        Ease ease = Ease.InOutSine;
+        private Ease ease = Ease.InOutSine;
 
         [BoxGroup("g1/Settings2", false), GUIColor(1, 1, 0.95f), SerializeField, LabelWidth(40), LabelText("In"), Min(0)]
-        float time = 0.3f;
+        private float time = 0.3f;
 
         [HorizontalGroup("g1/Messages"), GUIColor(0.95f, 1, 1), SerializeField]
         [ListDrawerSettings(Expanded = true, DraggableItems = false, ShowIndexLabels = false, ShowItemCount = false), PropertyOrder(-1), HideLabel, LabelText(" ")]
-        Variables.Variable[] message;
+        private Event[] fovEvent;
 
-        public IEnumerable<Variables.Variable> Message => message;
+        public IEnumerable<Event> Event => fovEvent;
         public float Zoom => zoom;
         public float Time => time;
         public Ease Ease => ease;
@@ -72,33 +73,34 @@ namespace Satisfy.Managers
     }
 
     [HideMonoScript]
-    public abstract class CameraManager : SerializedMonoBehaviour
+    public class CameraManager : SerializedMonoBehaviour
     {
-        [SerializeField, Debugging, LabelWidth(40)] bool debug;
+        [SerializeField, Debugging, LabelWidth(40)]
+        private bool debug;
 
         [ListDrawerSettings(ShowIndexLabels = false, ShowItemCount = false, Expanded = true, DraggableItems = false), LabelText("Zoom")]
         [SerializeField, Tweakable]
-        MessageZoom[] zoomList;
+        private MessageZoom[] zoomList;
 
         [ListDrawerSettings(ShowIndexLabels = false, ShowItemCount = false, Expanded = true, DraggableItems = false), LabelText("Set FOV")]
         [SerializeField, Tweakable]
-        MessageSetFOV[] fovList;
+        private MessageSetFOV[] fovList;
 
-        [SerializeField, Editor_R] TransformVariable lookAt;
-        [SerializeField, Editor_R] TransformVariable follow;
-        [SerializeField, Tweakable] UnityEvent onActiveCameraChanged;
+        [SerializeField, Editor_R] private GameObject lookAt;
+        [SerializeField, Editor_R] private GameObject follow;
+        [SerializeField, Tweakable] private UnityEvent onActiveCameraChanged;
 
         [SerializeField, HideIf("@debug == false"), Debugging]
-        CinemachineVirtualCamera activeCamera;
+        private CinemachineVirtualCamera activeCamera;
 
         [ListDrawerSettings(ShowIndexLabels = false, ShowItemCount = false, Expanded = false, DraggableItems = false), LabelText("Cameras")]
         [SerializeField, HideIf("@debug == false"), Debugging]
-        CinemachineVirtualCamera[] cameras;
+        private CinemachineVirtualCamera[] cameras;
 
         [SerializeField, HideIf("@debug == false"), Debugging]
-        Dictionary<CinemachineVirtualCamera, float> cameraFov = new Dictionary<CinemachineVirtualCamera, float>();
+        private Dictionary<CinemachineVirtualCamera, float> cameraFov = new Dictionary<CinemachineVirtualCamera, float>();
 
-        void Start()
+        private void Start()
         {
             cameras = gameObject.Children().OfComponent<CinemachineVirtualCamera>().ToArray();
 
@@ -107,40 +109,40 @@ namespace Satisfy.Managers
                 cameraFov.Add(cam, cam.m_Lens.FieldOfView);
             }
 
-            lookAt.ObserveEveryValueChanged(x => x.Value)
+            this.ObserveEveryValueChanged(x => x.lookAt)
                 .Where(x => x != null)
                 .Subscribe(x =>
                 {
                     foreach (var cam in cameras)
                     {
-                        cam.LookAt = x;
+                        cam.LookAt = x.transform;
                     }
                 }).AddTo(this);
 
-            follow.ObserveEveryValueChanged(x => x.Value)
+            this.ObserveEveryValueChanged(x => x.follow)
                 .Where(x => x != null)
                 .Subscribe(x =>
                 {
                     foreach (var cam in cameras)
                     {
-                        cam.Follow = x;
-                        cam.transform.position = x.position;
+                        cam.Follow = x.transform;
+                        cam.transform.position = x.transform.position;
                     }
                 }).AddTo(this);
 
             foreach (var zoomData in zoomList)
             {
-                foreach (var message in zoomData.Message)
+                foreach (var message in zoomData.Event)
                 {
-                    message.Published.Subscribe(_ => { ChangeFOV(zoomData); }).AddTo(this);
+                    message.Raised.Subscribe(_ => { ChangeFOV(zoomData); }).AddTo(this);
                 }
             }
 
             foreach (var fovData in fovList)
             {
-                foreach (var message in fovData.Message)
+                foreach (var message in fovData.Event)
                 {
-                    message.Published.Subscribe(_ => { SetFOV(fovData); }).AddTo(this);
+                    message.Raised.Subscribe(_ => { SetFOV(fovData); }).AddTo(this);
                 }
             }
         }

@@ -8,6 +8,7 @@ using UniRx;
 using UnityEngine;
 using System.Linq;
 using Satisfy.Attributes;
+using Event = Satisfy.Bricks.Event;
 
 namespace Satisfy.Managers
 {
@@ -19,7 +20,7 @@ namespace Satisfy.Managers
         [LabelText("  ")]
         [HorizontalGroup("ses")]
         [SerializeField, GUIColor(1, 1, 1f), VerticalGroup("ses/1")]
-        AudioClip[] clips;
+        private AudioClip[] clips;
 
         [SerializeField, GUIColor(1, 1, 0.95f), VerticalGroup("ses/2"), HideLabel, MinMaxSlider(0, 1, true)]
         Vector2 volume = new Vector2(0.5f, 1f);
@@ -29,7 +30,7 @@ namespace Satisfy.Managers
 
         public Vector2 Pitch => pitch;
         public Vector2 Volume => volume;
-        public IEnumerable<AudioClip> Clips => clips;
+        public AudioClip[] Clips => clips;
 
         [HideInInspector] public AudioSource source;
     }
@@ -41,19 +42,20 @@ namespace Satisfy.Managers
         [HorizontalGroup("mes/1")]
         [GUIColor(0.95f, 1, 1), SerializeField]
         [ListDrawerSettings(Expanded = true, DraggableItems = false, ShowIndexLabels = false, ShowItemCount = false), HideLabel, LabelText(" ")]
-        Variables.Variable[] message;
-
+        private Event[] message;
+ 
+        
         [HorizontalGroup("mes/2")]
         [ShowIf("@shouldStop == true")]
         [GUIColor(1, 0.95f, 0.95f), SerializeField]
         [ListDrawerSettings(Expanded = true, DraggableItems = false, ShowIndexLabels = false, ShowItemCount = false), HideLabel, LabelText(" ")]
-        Variables.Variable[] messageStop;
+        private Event[] messageStop;
 
         [SerializeField, VerticalGroup("mes/3"), ToggleLeft]
-        bool shouldStop;
+        private bool shouldStop;
 
         [SerializeField, VerticalGroup("mes/3"), ToggleLeft]
-        bool loop;
+        private bool loop;
 
         [GUIColor(1, 1, 0.95f), SerializeField, HideLabel]
         TweakableAudioClip audio;
@@ -64,8 +66,8 @@ namespace Satisfy.Managers
             {"Repeat", true}
         };
 
-        public IEnumerable<Variables.Variable> Message => message;
-        public IEnumerable<Variables.Variable> MessageStop => messageStop;
+        public IEnumerable<Event> Message => message;
+        public IEnumerable<Event> MessageStop => messageStop;
         public TweakableAudioClip Audio => audio;
         public bool ShouldStop => shouldStop;
         public bool Loop => loop;
@@ -74,13 +76,13 @@ namespace Satisfy.Managers
     [Serializable, CreateAssetMenu(fileName = "Audio", menuName = "Managers/Audio")]
     public class AudioManagerSO : ScriptableObjectSystem
     {
-        [SerializeField, Variable_R] FloatVariable volume;
-        [SerializeField, Variable_R] BoolVariable muted;
-        [SerializeField, Tweakable] bool overrideDisableSounds;
+        [SerializeField, Variable_R] [InlineEditor] private FloatVariable volume;
+        [SerializeField, Variable_R] [InlineEditor] private BoolVariable muted;
+        [SerializeField, Tweakable] private bool overrideDisableSounds;
 
         [ListDrawerSettings(ShowIndexLabels = false, ShowItemCount = false, Expanded = true), LabelText(" ")]
         [SerializeField, GUIColor(1, 1, 0.95f)]
-        MessageAudio[] list;
+        private MessageAudio[] list;
 
         public override void Initialize()
         {
@@ -92,7 +94,7 @@ namespace Satisfy.Managers
 
                 foreach (var message in messageAudio.Message)
                 {
-                    var receivedMessage = message.Published.Where(_ => !muted)
+                    var receivedMessage = message.Raised.Where(_ => !muted.Value)
                                                            .Where(_ => !overrideDisableSounds);
 
                     receivedMessage.Subscribe(_ =>
